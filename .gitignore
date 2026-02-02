@@ -1,0 +1,41 @@
+### --- IDE & Project General --- ###
+.idea/
+.gradle/
+**/build/
+build/
+local.properties
+.DS_Store
+*.iml
+*.iws
+*.ipr
+captures/
+.kotlin/
+.konan/
+
+### --- Android Specific --- ###
+/androidApp/local.properties
+/androidApp/.cxx/
+*.keystore
+*.jks
+google-services.json
+
+### --- iOS Specific (Kotlin Native & Xcode) --- ###
+/iosApp/DerivedData/
+/iosApp/build/
+/iosApp/Pods/
+/iosApp/.xcworkspace/
+**/xcuserdata/
+**/*.xcworkspace/xcuserdata/
+**/*.xcodeproj/xcuserdata/
+**/*.xcodeproj/project.xcworkspace/
+
+# 排除 Kotlin Native 產生的 framework (由 Gradle 自動管理，不應進 Git)
+*.framework/
+/iosApp/*.xcworkspace
+
+### --- OS Generated --- ###
+.localized
+Thumbs.db
+Desktop.ini
+*~
+*.swp
