@@ -1,0 +1,22 @@
+<resources>
+    <string name="transaction_type_expense">支出</string>
+    <string name="transaction_type_income">收入</string>
+
+    <string name="category_income_salary">薪資</string>
+    <string name="category_income_bonus">獎金</string>
+    <string name="category_income_investment">投資</string>
+    <string name="category_income_allowance">零用錢</string>
+    <string name="category_income_other">其他</string>
+
+    <string name="category_expense_food">食物</string>
+    <string name="category_expense_transport">交通</string>
+    <string name="category_expense_entertainment">娛樂</string>
+    <string name="category_expense_daily">日常用品</string>
+    <string name="category_expense_utilities">水電瓦斯</string>
+    <string name="category_expense_insurance">保險</string>
+    <string name="category_expense_medical">醫療保健</string>
+    <string name="category_expense_education">教育/進修</string>
+    <string name="category_expense_communication">手機網路</string>
+    <string name="category_expense_tax">稅金</string>
+    <string name="category_expense_other">其他</string>
+</resources>
