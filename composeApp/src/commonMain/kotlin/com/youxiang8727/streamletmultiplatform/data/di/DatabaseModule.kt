@@ -5,8 +5,11 @@ import com.youxiang8727.streamletmultiplatform.data.db.StreamletDatabaseFactory
 import com.youxiang8727.streamletmultiplatform.data.db.dao.CategoryEntityDao
 import com.youxiang8727.streamletmultiplatform.data.db.dao.TransactionEntityDao
 import com.youxiang8727.streamletmultiplatform.data.db.repository.CategoryRepositoryImpl
+import com.youxiang8727.streamletmultiplatform.data.db.repository.TransactionRepositoryImpl
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.CategoryRepository
+import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.TransactionRepository
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetAllCategoriesUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByDateUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.InsertDefaultCategoriesUseCase
 import org.koin.dsl.module
 
@@ -17,6 +20,10 @@ val databaseModule = module {
 
     single<TransactionEntityDao> {
         get<StreamletDatabase>().transactionEntityDao()
+    }
+
+    single<TransactionRepository> {
+        TransactionRepositoryImpl(get())
     }
 
     single<CategoryEntityDao> {
@@ -33,5 +40,9 @@ val databaseModule = module {
 
     factory<GetAllCategoriesUseCase> {
         GetAllCategoriesUseCase(get())
+    }
+
+    factory<GetTransactionByDateUseCase> {
+        GetTransactionByDateUseCase(get())
     }
 }

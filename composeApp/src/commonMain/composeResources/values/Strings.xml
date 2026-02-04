@@ -19,4 +19,7 @@
     <string name="category_expense_communication">手機網路</string>
     <string name="category_expense_tax">稅金</string>
     <string name="category_expense_other">其他</string>
+
+    <string name="label_income">收入: %1$d</string>
+    <string name="label_expense">支出: %1$d</string>
 </resources>
