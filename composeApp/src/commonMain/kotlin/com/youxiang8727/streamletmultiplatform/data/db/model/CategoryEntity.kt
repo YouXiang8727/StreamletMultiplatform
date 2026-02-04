@@ -3,6 +3,7 @@ package com.youxiang8727.streamletmultiplatform.data.db.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.youxiang8727.streamletmultiplatform.domain.transaction.model.Category
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.DefaultCategory
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.TransactionType
 
@@ -25,3 +26,10 @@ data class CategoryEntity(
         default = true
     )
 }
+
+fun CategoryEntity.toCategory(): Category = Category(
+    id = id,
+    name = name,
+    type = type,
+    default = default
+)

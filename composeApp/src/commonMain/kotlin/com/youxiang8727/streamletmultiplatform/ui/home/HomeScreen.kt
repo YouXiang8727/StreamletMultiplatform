@@ -161,7 +161,7 @@ private fun TransactionItem(
                 )
 
                 Text(
-                    text = transactionItemUiState.categoryName.asString(),
+                    text = transactionItemUiState.categoryUiText.asString(),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -195,13 +195,13 @@ private fun HomeScreenContentPreview() {
                             id = 0,
                             title = "發票中獎",
                             amount = 200.0,
-                            categoryName = UiText.DynamicString("獎金")
+                            categoryUiText = UiText.DynamicString("獎金")
                         ),
                         TransactionItemUiState(
                             id = 1,
                             title = "發票中獎",
                             amount = 200.0,
-                            categoryName = UiText.DynamicString("獎金")
+                            categoryUiText = UiText.DynamicString("獎金")
                         ),
                     ),
                     expense = 314.0,
@@ -210,37 +210,37 @@ private fun HomeScreenContentPreview() {
                             id = 2,
                             title = "捷運",
                             amount = 30.0,
-                            categoryName = UiText.DynamicString("交通")
+                            categoryUiText = UiText.DynamicString("交通")
                         ),
                         TransactionItemUiState(
                             id = 3,
                             title = "早餐",
                             amount = 59.0,
-                            categoryName = UiText.DynamicString("食物")
+                            categoryUiText = UiText.DynamicString("食物")
                         ),
                         TransactionItemUiState(
                             id = 4,
                             title = "午餐",
                             amount = 125.0,
-                            categoryName = UiText.DynamicString("食物")
+                            categoryUiText = UiText.DynamicString("食物")
                         ),
                         TransactionItemUiState(
                             id = 5,
                             title = "捷運",
                             amount = 30.0,
-                            categoryName = UiText.DynamicString("交通")
+                            categoryUiText = UiText.DynamicString("交通")
                         ),
                         TransactionItemUiState(
                             id = 6,
                             title = "飲料",
                             amount = 35.0,
-                            categoryName = UiText.DynamicString("食物")
+                            categoryUiText = UiText.DynamicString("食物")
                         ),
                         TransactionItemUiState(
                             id = 7,
                             title = "飲料",
                             amount = 35.0,
-                            categoryName = UiText.DynamicString("食物")
+                            categoryUiText = UiText.DynamicString("食物")
                         ),
                     )
                 )

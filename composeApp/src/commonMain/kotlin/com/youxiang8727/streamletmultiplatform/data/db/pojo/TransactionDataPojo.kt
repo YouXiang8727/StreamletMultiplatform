@@ -2,11 +2,10 @@ package com.youxiang8727.streamletmultiplatform.data.db.pojo
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.youxiang8727.streamletmultiplatform.core.ui.UiText
 import com.youxiang8727.streamletmultiplatform.data.db.model.CategoryEntity
 import com.youxiang8727.streamletmultiplatform.data.db.model.TransactionEntity
-import com.youxiang8727.streamletmultiplatform.domain.transaction.model.DefaultCategory
-import com.youxiang8727.streamletmultiplatform.ui.home.TransactionItemUiState
+import com.youxiang8727.streamletmultiplatform.data.db.model.toCategory
+import com.youxiang8727.streamletmultiplatform.domain.transaction.model.TransactionData
 
 data class TransactionDataPojo(
     @Embedded val transactionEntity: TransactionEntity,
@@ -17,15 +16,11 @@ data class TransactionDataPojo(
     val categoryEntity: CategoryEntity
 )
 
-fun TransactionDataPojo.toTransactionItemUiState(): TransactionItemUiState = TransactionItemUiState(
+fun TransactionDataPojo.toTransactionData(): TransactionData = TransactionData(
     id = transactionEntity.id,
     title = transactionEntity.title,
+    date = transactionEntity.date,
     amount = transactionEntity.amount,
-    categoryName = if (categoryEntity.default) {
-        UiText.StringResource(
-            DefaultCategory.valueOf(categoryEntity.name).stringResource
-        )
-    } else {
-        UiText.DynamicString(categoryEntity.name)
-    }
+    description = transactionEntity.description,
+    category = categoryEntity.toCategory()
 )
