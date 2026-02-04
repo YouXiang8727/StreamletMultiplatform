@@ -25,5 +25,5 @@ data class TransactionItemUiState(
     val id: Long = 0,
     val title: String = "",
     val amount: Double = 0.0,
-    val categoryName: UiText = UiText.DynamicString("")
+    val categoryUiText: UiText = UiText.DynamicString("")
 )
