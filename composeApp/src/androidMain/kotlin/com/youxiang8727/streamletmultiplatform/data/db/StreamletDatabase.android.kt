@@ -14,6 +14,7 @@ actual class StreamletDatabaseFactory {
                 name = dbFile.absolutePath,
             ).setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
+            .addCallback(DATABASE_ON_CREATE_CALLBACK)
             .build()
     }
 }
