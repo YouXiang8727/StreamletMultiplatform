@@ -9,8 +9,11 @@ import com.youxiang8727.streamletmultiplatform.data.db.repository.TransactionRep
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.CategoryRepository
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.TransactionRepository
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetAllCategoriesUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoriesByTransactionTypeUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByDateUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByIdUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.InsertDefaultCategoriesUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertTransactionUseCase
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -44,5 +47,17 @@ val databaseModule = module {
 
     factory<GetTransactionByDateUseCase> {
         GetTransactionByDateUseCase(get())
+    }
+
+    factory<GetTransactionByIdUseCase> {
+        GetTransactionByIdUseCase(get())
+    }
+
+    factory<UpsertTransactionUseCase> {
+        UpsertTransactionUseCase(get())
+    }
+
+    factory<GetCategoriesByTransactionTypeUseCase> {
+        GetCategoriesByTransactionTypeUseCase(get())
     }
 }

@@ -17,4 +17,8 @@ interface TransactionEntityDao {
     @Transaction
     @Query("SELECT * FROM `transaction` WHERE date = :date")
     fun getTransactionsByDate(date: LocalDate): Flow<List<TransactionDataPojo>>
+
+    @Transaction
+    @Query("SELECT * FROM `transaction` WHERE id = :id")
+    suspend fun getTransactionById(id: Long): TransactionDataPojo
 }
