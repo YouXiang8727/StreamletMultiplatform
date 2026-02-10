@@ -1,5 +1,6 @@
 package com.youxiang8727.streamletmultiplatform.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.youxiang8727.streamletmultiplatform.core.ui.UiText
 import com.youxiang8727.streamletmultiplatform.ui.common.calendar.BasicCalendarView
 import com.youxiang8727.streamletmultiplatform.ui.common.calendar.rememberCalendarState
+import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenDataSource
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -32,7 +38,8 @@ import streamletmultiplatform.composeapp.generated.resources.label_income
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = koinViewModel()
+    viewModel: HomeScreenViewModel = koinViewModel(),
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     
@@ -41,7 +48,8 @@ fun HomeScreen(
         uiState = state,
         onDateSelected = {
             viewModel.onDateSelected(it)
-        }
+        },
+        navigateToTransactionScreen = navigateToTransactionScreen
     )
 }
 
@@ -49,78 +57,99 @@ fun HomeScreen(
 private fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeScreenUiState = HomeScreenUiState(),
-    onDateSelected: (LocalDate) -> Unit = {}
+    onDateSelected: (LocalDate) -> Unit = {},
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        val calendarState = rememberCalendarState(
-            onDateSelected = onDateSelected
-        )
-
-        BasicCalendarView(
-            modifier = Modifier.fillMaxWidth()
-                .padding(8.dp),
-            state = calendarState,
-            header = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        modifier = Modifier,
-                        text = uiState.selectedDateString,
-                        style = MaterialTheme.typography.titleMedium
+    Scaffold(
+        modifier = modifier,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navigateToTransactionScreen(
+                        TransactionScreenDataSource.CreateNewTransactionData(uiState.selectedDate)
                     )
                 }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
             }
-        )
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.End
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            item {
-                TransactionTypeLabel(
-                    modifier = Modifier,
-                    text = stringResource(
-                        Res.string.label_income,
-                        uiState.income
-                    )
-                )
-            }
+            val calendarState = rememberCalendarState(
+                initialDate = uiState.selectedDate,
+                onDateSelected = onDateSelected
+            )
 
-            items(
-                items = uiState.incomeTransactions,
-                key = { it.id }
+            BasicCalendarView(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp),
+                state = calendarState,
+                header = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = uiState.selectedDateString,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
             ) {
-                TransactionItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    transactionItemUiState = it
-                )
-            }
-
-            item {
-                TransactionTypeLabel(
-                    modifier = Modifier,
-                    text = stringResource(
-                        Res.string.label_expense,
-                        uiState.expense
+                item {
+                    TransactionTypeLabel(
+                        modifier = Modifier,
+                        text = stringResource(
+                            Res.string.label_income,
+                            uiState.income
+                        )
                     )
-                )
-            }
+                }
 
-            items(
-                items = uiState.expenseTransactions,
-                key = { it.id }
-            ) {
-                TransactionItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    transactionItemUiState = it
-                )
+                items(
+                    items = uiState.incomeTransactions,
+                    key = { it.id }
+                ) {
+                    TransactionItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        transactionItemUiState = it
+                    )
+                }
+
+                item {
+                    TransactionTypeLabel(
+                        modifier = Modifier,
+                        text = stringResource(
+                            Res.string.label_expense,
+                            uiState.expense
+                        )
+                    )
+                }
+
+                items(
+                    items = uiState.expenseTransactions,
+                    key = { it.id }
+                ) {
+                    TransactionItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        transactionItemUiState = it,
+                        navigateToTransactionScreen = navigateToTransactionScreen
+                    )
+                }
             }
         }
     }
@@ -141,10 +170,16 @@ private fun TransactionTypeLabel(
 @Composable
 private fun TransactionItem(
     modifier: Modifier = Modifier,
-    transactionItemUiState: TransactionItemUiState = TransactionItemUiState()
+    transactionItemUiState: TransactionItemUiState = TransactionItemUiState(),
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
 ) {
     ElevatedCard(
         modifier = modifier
+            .clickable {
+                navigateToTransactionScreen(
+                    TransactionScreenDataSource.EditTransactionDataById(transactionItemUiState.id)
+                )
+            }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()

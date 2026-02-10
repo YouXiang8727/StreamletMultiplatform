@@ -17,28 +17,33 @@ class TransactionScreenViewModel(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val upsertTransactionUseCase: UpsertTransactionUseCase,
     private val getCategoriesByTransactionTypeUseCase: GetCategoriesByTransactionTypeUseCase,
-    private val id: Long
+    private val dataSource: TransactionScreenDataSource
 ): MviViewModel<TransactionScreenUiState, TransactionScreenUiEvent, Nothing>(
     initialState = TransactionScreenUiState(),
     reducer = TransactionScreenReducer()
 ) {
     private suspend fun initTransactionData() {
-        if (id != 0L) {
-            val transaction = getTransactionByIdUseCase(id)
-            dispatch(
-                TransactionScreenUiEvent.OnTransactionDataUpdated(
-                    transactionData = transaction
+        when (dataSource) {
+            is TransactionScreenDataSource.CreateNewTransactionData -> {
+                val categories = getCategoriesByTransactionTypeUseCase(state.value.transactionType)
+                dispatch(
+                    TransactionScreenUiEvent.OnNewTransactionData(
+                        date = dataSource.date,
+                        transactionType = state.value.transactionType,
+                        categories = categories,
+                        category = getDefaultCategory(state.value.transactionType).toCategory()
+                    )
                 )
-            )
-        } else {
-            val categories = getCategoriesByTransactionTypeUseCase(state.value.transactionType)
-            dispatch(
-                TransactionScreenUiEvent.OnTransactionTypeChanged(
-                    transactionType = state.value.transactionType,
-                    categories = categories,
-                    selectedCategory = getDefaultCategory(state.value.transactionType).toCategory()
+            }
+
+            is TransactionScreenDataSource.EditTransactionDataById -> {
+                val transaction = getTransactionByIdUseCase(dataSource.id)
+                dispatch(
+                    TransactionScreenUiEvent.OnTransactionDataUpdated(
+                        transactionData = transaction
+                    )
                 )
-            )
+            }
         }
     }
 
