@@ -54,6 +54,15 @@ class TransactionScreenReducer: Reducer<TransactionScreenUiState, TransactionScr
                     description = ""
                 )
             }
+
+            is TransactionScreenUiEvent.OnNewTransactionData -> {
+                state.copy(
+                    date = event.date,
+                    transactionType = event.transactionType,
+                    categories = event.categories,
+                    category = event.category
+                )
+            }
         }
     }
 }

@@ -7,6 +7,13 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.model.Transact
 import kotlinx.datetime.LocalDate
 
 sealed interface TransactionScreenUiEvent: UiEvent {
+    data class OnNewTransactionData(
+        val date: LocalDate,
+        val transactionType: TransactionType,
+        val categories: List<Category>,
+        val category: Category
+    ): TransactionScreenUiEvent
+
     data class OnTransactionDataUpdated(val transactionData: TransactionData): TransactionScreenUiEvent
 
     data class OnTransactionTypeChanged(
