@@ -211,6 +211,11 @@ private fun TransactionScreenContent(
                     text = stringResource(Res.string.label_amount)
                 )
             },
+            placeholder = {
+                Text(
+                    text = "0.0"
+                )
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.AttachMoney,
@@ -231,11 +236,6 @@ private fun TransactionScreenContent(
             label = {
                 Text(
                     text = stringResource(Res.string.label_description)
-                )
-            },
-            placeholder = {
-                Text(
-                    text = "0.0"
                 )
             },
             leadingIcon = {
