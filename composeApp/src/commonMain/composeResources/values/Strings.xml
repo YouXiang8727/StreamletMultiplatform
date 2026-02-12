@@ -31,4 +31,9 @@
 
     <string name="button_cancel">取消</string>
     <string name="button_save">儲存</string>
+
+    <string name="label_app_theme">主題</string>
+    <string name="app_theme_mode_system">系統模式</string>
+    <string name="app_theme_mode_light">淺色模式</string>
+    <string name="app_theme_mode_dark">深色模式</string>
 </resources>

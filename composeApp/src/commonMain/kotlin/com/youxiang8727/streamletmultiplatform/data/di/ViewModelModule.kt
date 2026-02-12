@@ -2,13 +2,14 @@ package com.youxiang8727.streamletmultiplatform.data.di
 
 import com.youxiang8727.streamletmultiplatform.AppViewModel
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
+import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel<AppViewModel> {
-        AppViewModel(get())
+        AppViewModel(get(), get())
     }
 
     viewModel<HomeScreenViewModel> {
@@ -22,5 +23,9 @@ val viewModelModule = module {
             get(),
             params[0]
         )
+    }
+
+    viewModel<SettingsScreenViewModel> {
+        SettingsScreenViewModel(get(), get())
     }
 }
