@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +29,8 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreen
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
+import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreen
+import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreen
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenDataSource
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenViewModel
@@ -48,6 +52,11 @@ sealed class MainRoute(
     data object HomeRoute: MainRoute(
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
+    )
+
+    data object SettingsRoute: MainRoute(
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings
     )
 }
 
@@ -112,6 +121,15 @@ fun MainNavigation(
                             }
                         )
                     }
+
+                    is MainRoute.SettingsRoute -> NavEntry(key) {
+                        val viewModel: SettingsScreenViewModel = koinViewModel()
+
+                        SettingsScreen(
+                            modifier = Modifier.fillMaxSize(),
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
         )
@@ -124,8 +142,9 @@ private fun BottomNavigation(
     current: MainRoute = MainRoute.HomeRoute,
     navigateTo: (MainRoute) -> Unit = {}
 ) {
-    val routes = listOf<MainRoute>(
-        MainRoute.HomeRoute
+    val routes = listOf(
+        MainRoute.HomeRoute,
+        MainRoute.SettingsRoute
     )
 
     BottomAppBar(
