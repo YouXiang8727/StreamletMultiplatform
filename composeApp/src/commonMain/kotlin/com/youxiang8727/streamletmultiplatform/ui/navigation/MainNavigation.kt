@@ -1,20 +1,18 @@
 package com.youxiang8727.streamletmultiplatform.ui.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -34,8 +32,13 @@ import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreenViewMod
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreen
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenDataSource
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenViewModel
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import streamletmultiplatform.composeapp.generated.resources.Res
+import streamletmultiplatform.composeapp.generated.resources.label_home
+import streamletmultiplatform.composeapp.generated.resources.label_settings
 
 sealed class Route(val showBottomBar: Boolean): NavKey
 
@@ -46,17 +49,20 @@ data class TransactionRoute(val transactionScreenDateSource: TransactionScreenDa
 sealed class MainRoute(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
+    val label: StringResource
 ): Route(
     showBottomBar = true
 ) {
     data object HomeRoute: MainRoute(
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
+        label = Res.string.label_home
     )
 
     data object SettingsRoute: MainRoute(
         selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Outlined.Settings
+        unselectedIcon = Icons.Outlined.Settings,
+        label = Res.string.label_settings
     )
 }
 
@@ -75,9 +81,7 @@ fun MainNavigation(
         bottomBar = {
             if (backStack.last().showBottomBar.not()) return@Scaffold
             BottomNavigation(
-                modifier = Modifier.fillMaxWidth()
-                    .height(80.dp),
-                current = MainRoute.HomeRoute,
+                current = backStack.last(),
                 navigateTo = {
                     backStack.navigateTo(it)
                 }
@@ -138,8 +142,7 @@ fun MainNavigation(
 
 @Composable
 private fun BottomNavigation(
-    modifier: Modifier = Modifier,
-    current: MainRoute = MainRoute.HomeRoute,
+    current: Route = MainRoute.HomeRoute,
     navigateTo: (MainRoute) -> Unit = {}
 ) {
     val routes = listOf(
@@ -147,19 +150,16 @@ private fun BottomNavigation(
         MainRoute.SettingsRoute
     )
 
-    BottomAppBar(
-        modifier = modifier
+    NavigationBar(
+        windowInsets = NavigationBarDefaults.windowInsets
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            routes.forEach { route ->
-                IconButton(
-                    onClick = {
-                        navigateTo(route)
-                    }
-                ) {
+        routes.forEach { route ->
+            NavigationBarItem(
+                selected = route::class == current::class,
+                onClick = {
+                    navigateTo(route)
+                },
+                icon = {
                     Icon(
                         imageVector = if (route::class == current::class) {
                             route.selectedIcon
@@ -168,8 +168,13 @@ private fun BottomNavigation(
                         },
                         contentDescription = null
                     )
+                },
+                label = {
+                    Text(
+                        text = stringResource(route.label)
+                    )
                 }
-            }
+            )
         }
     }
 }

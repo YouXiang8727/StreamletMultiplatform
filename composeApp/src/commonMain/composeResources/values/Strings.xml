@@ -1,4 +1,7 @@
 <resources>
+    <string name="label_home">首頁</string>
+    <string name="label_settings">設定</string>
+
     <string name="transaction_type_expense">支出</string>
     <string name="transaction_type_income">收入</string>
 
