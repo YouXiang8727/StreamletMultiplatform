@@ -25,6 +25,8 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.youxiang8727.streamletmultiplatform.ui.category.CategoriesScreen
+import com.youxiang8727.streamletmultiplatform.ui.category.CategoriesScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreen
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreen
@@ -45,6 +47,8 @@ sealed class Route(val showBottomBar: Boolean): NavKey
 data class TransactionRoute(val transactionScreenDateSource: TransactionScreenDataSource): Route(
     showBottomBar = false
 )
+
+data object CategoriesRoute: Route(showBottomBar = false)
 
 sealed class MainRoute(
     val selectedIcon: ImageVector,
@@ -130,6 +134,18 @@ fun MainNavigation(
                         val viewModel: SettingsScreenViewModel = koinViewModel()
 
                         SettingsScreen(
+                            modifier = Modifier.fillMaxSize(),
+                            viewModel = viewModel,
+                            navigateToCategoriesScreen = {
+                                backStack.navigateTo(CategoriesRoute)
+                            }
+                        )
+                    }
+
+                    is CategoriesRoute -> NavEntry(key) {
+                        val viewModel: CategoriesScreenViewModel = koinViewModel()
+
+                        CategoriesScreen(
                             modifier = Modifier.fillMaxSize(),
                             viewModel = viewModel
                         )

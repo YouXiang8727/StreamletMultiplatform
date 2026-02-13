@@ -39,4 +39,9 @@
     <string name="app_theme_mode_system">系統模式</string>
     <string name="app_theme_mode_light">淺色模式</string>
     <string name="app_theme_mode_dark">深色模式</string>
+
+    <string name="label_app_settings">APP設定</string>
+    <string name="label_categories_settings">分類設定</string>
+
+    <string name="hint_default_category_protected">預設類別無法被編輯或刪除</string>
 </resources>

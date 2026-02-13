@@ -1,6 +1,7 @@
 package com.youxiang8727.streamletmultiplatform.data.di
 
 import com.youxiang8727.streamletmultiplatform.AppViewModel
+import com.youxiang8727.streamletmultiplatform.ui.category.CategoriesScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenViewModel
@@ -27,5 +28,9 @@ val viewModelModule = module {
 
     viewModel<SettingsScreenViewModel> {
         SettingsScreenViewModel(get(), get())
+    }
+
+    viewModel<CategoriesScreenViewModel> {
+        CategoriesScreenViewModel(get())
     }
 }
