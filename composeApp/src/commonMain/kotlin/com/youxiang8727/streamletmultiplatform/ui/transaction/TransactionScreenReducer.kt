@@ -1,9 +1,7 @@
-package com.youxiang8727.streamletmultiplatform.domain.transaction.usecase
+package com.youxiang8727.streamletmultiplatform.ui.transaction
 
 import com.youxiang8727.streamletmultiplatform.core.mvi.Reducer
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.toTransactionScreenUiState
-import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenUiEvent
-import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenUiState
 
 class TransactionScreenReducer: Reducer<TransactionScreenUiState, TransactionScreenUiEvent>() {
     override fun reduce(
