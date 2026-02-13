@@ -33,7 +33,7 @@ fun SettingsScreen(
 
     SettingsScreenContent(
         modifier = modifier,
-        appThemeMode = state.appThemeMode,
+        uiState = state,
         saveAppThemeMode = viewModel::saveAppThemeMode
     )
 }
@@ -41,7 +41,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsScreenContent(
     modifier: Modifier = Modifier,
-    appThemeMode: AppThemeMode = AppThemeMode.SYSTEM,
+    uiState: SettingsScreenUiState = SettingsScreenUiState(),
     saveAppThemeMode: (AppThemeMode) -> Unit = {}
 ) {
     LazyColumn(
@@ -60,7 +60,7 @@ private fun SettingsScreenContent(
         item {
             AppThemeModeView(
                 modifier = Modifier.fillMaxWidth(),
-                appThemeMode = appThemeMode,
+                appThemeMode = uiState.appThemeMode,
                 saveAppThemeMode = saveAppThemeMode
             )
         }
