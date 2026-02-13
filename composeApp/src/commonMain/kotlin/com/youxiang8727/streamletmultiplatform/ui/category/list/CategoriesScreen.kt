@@ -1,4 +1,4 @@
-package com.youxiang8727.streamletmultiplatform.ui.category
+package com.youxiang8727.streamletmultiplatform.ui.category.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

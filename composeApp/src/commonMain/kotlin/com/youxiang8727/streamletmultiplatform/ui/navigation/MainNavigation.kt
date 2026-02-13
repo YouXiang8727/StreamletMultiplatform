@@ -25,8 +25,8 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.youxiang8727.streamletmultiplatform.ui.category.CategoriesScreen
-import com.youxiang8727.streamletmultiplatform.ui.category.CategoriesScreenViewModel
+import com.youxiang8727.streamletmultiplatform.ui.category.list.CategoriesScreen
+import com.youxiang8727.streamletmultiplatform.ui.category.list.CategoriesScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreen
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreen

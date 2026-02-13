@@ -1,4 +1,4 @@
-package com.youxiang8727.streamletmultiplatform.ui.category
+package com.youxiang8727.streamletmultiplatform.ui.category.list
 
 import com.youxiang8727.streamletmultiplatform.core.mvi.Reducer
 
