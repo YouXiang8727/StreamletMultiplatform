@@ -8,7 +8,7 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.model.getDefau
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.toCategory
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoriesByTransactionTypeUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByIdUseCase
-import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.TransactionScreenReducer
+import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenReducer
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertTransactionUseCase
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
