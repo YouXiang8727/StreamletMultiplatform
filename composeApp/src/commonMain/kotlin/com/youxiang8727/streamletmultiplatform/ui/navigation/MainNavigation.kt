@@ -156,6 +156,9 @@ fun MainNavigation(
                                 backStack.navigateTo(
                                     EditCategoryRoute(it)
                                 )
+                            },
+                            back = {
+                                backStack.removeLastOrNull()
                             }
                         )
                     }

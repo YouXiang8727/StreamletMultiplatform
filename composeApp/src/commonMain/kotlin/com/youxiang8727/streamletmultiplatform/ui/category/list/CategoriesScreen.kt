@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,10 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -24,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +39,7 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.model.Category
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.DefaultCategory
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.TransactionType
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.toCategory
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import streamletmultiplatform.composeapp.generated.resources.Res
@@ -42,11 +49,14 @@ import streamletmultiplatform.composeapp.generated.resources.hint_default_catego
 fun CategoriesScreen(
     modifier: Modifier = Modifier,
     viewModel: CategoriesScreenViewModel = koinViewModel(),
-    navigateToEditCategoryById: (Long) -> Unit = {}
+    navigateToEditCategoryById: (Long) -> Unit = {},
+    back: () -> Unit = {}
 ) {
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+
+    val snackbarHostScope = rememberCoroutineScope()
 
     val defaultCategoryProtectedMessage = stringResource(Res.string.hint_default_category_protected)
 
@@ -57,9 +67,11 @@ fun CategoriesScreen(
                     navigateToEditCategoryById(effect.id)
                 }
                 is CategoriesScreenUiEffect.ShowDefaultCategoryProtectedMessage -> {
-                    snackbarHostState.showSnackbar(
-                        message = defaultCategoryProtectedMessage
-                    )
+                    snackbarHostScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = defaultCategoryProtectedMessage
+                        )
+                    }
                 }
             }
         }
@@ -75,10 +87,12 @@ fun CategoriesScreen(
         onCategoryClicked = viewModel::onCategoryClicked,
         navigateToCreateNewCategory = {
             navigateToEditCategoryById(0L)
-        }
+        },
+        back = back
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoriesScreenContent(
     modifier: Modifier = Modifier,
@@ -86,10 +100,29 @@ private fun CategoriesScreenContent(
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
     onTransactionTypeChanged: (TransactionType) -> Unit = {},
     onCategoryClicked: (Category) -> Unit = {},
-    navigateToCreateNewCategory: () -> Unit = {}
+    navigateToCreateNewCategory: () -> Unit = {},
+    back: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            back()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBackIosNew,
+                            contentDescription = null
+                        )
+                    }
+                },
+                windowInsets = WindowInsets(),
+            )
+        },
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState
@@ -107,9 +140,10 @@ private fun CategoriesScreenContent(
                 )
             }
         }
-    ) {
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(

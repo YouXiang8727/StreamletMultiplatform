@@ -5,10 +5,9 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.model.Transact
 
 data class EditCategoryScreenUiState(
     val id: Long = 0L,
-    val originalName: String = "",
     val name: String = "",
     val transactionType: TransactionType = TransactionType.INCOME,
     val showDuplicatedAlertDialog: Boolean = false
 ): UiState {
-    val saveable: Boolean = name.isNotBlank() && name != originalName
+    val saveable: Boolean = name.isNotBlank()
 }

@@ -11,7 +11,6 @@ class EditCategoryScreenReducer: Reducer<EditCategoryScreenUiState, EditCategory
             is EditCategoryScreenUiEvent.OnDataInitialized -> {
                 EditCategoryScreenUiState(
                     id = event.id,
-                    originalName = event.name,
                     name = event.name,
                     transactionType = event.transactionType,
                     showDuplicatedAlertDialog = false
