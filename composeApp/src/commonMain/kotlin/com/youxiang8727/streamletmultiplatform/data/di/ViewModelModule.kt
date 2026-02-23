@@ -1,6 +1,7 @@
 package com.youxiang8727.streamletmultiplatform.data.di
 
 import com.youxiang8727.streamletmultiplatform.AppViewModel
+import com.youxiang8727.streamletmultiplatform.ui.category.edit.EditCategoryScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.category.list.CategoriesScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.home.HomeScreenViewModel
 import com.youxiang8727.streamletmultiplatform.ui.settings.SettingsScreenViewModel
@@ -32,5 +33,14 @@ val viewModelModule = module {
 
     viewModel<CategoriesScreenViewModel> {
         CategoriesScreenViewModel(get())
+    }
+
+    viewModel<EditCategoryScreenViewModel> { params ->
+        EditCategoryScreenViewModel(
+            params[0],
+            get(),
+            get(),
+            get()
+        )
     }
 }

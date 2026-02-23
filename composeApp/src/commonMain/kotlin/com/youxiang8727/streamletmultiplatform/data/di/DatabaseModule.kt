@@ -10,9 +10,12 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.Cat
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.TransactionRepository
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetAllCategoriesUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoriesByTransactionTypeUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoryByIdUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoryByTransactionTypeAndNameUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByDateUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByIdUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.InsertDefaultCategoriesUseCase
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertCategoryUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertTransactionUseCase
 import org.koin.dsl.module
 
@@ -59,5 +62,17 @@ val databaseModule = module {
 
     factory<GetCategoriesByTransactionTypeUseCase> {
         GetCategoriesByTransactionTypeUseCase(get())
+    }
+
+    factory<GetCategoryByIdUseCase> {
+        GetCategoryByIdUseCase(get())
+    }
+
+    factory<GetCategoryByTransactionTypeAndNameUseCase> {
+        GetCategoryByTransactionTypeAndNameUseCase(get())
+    }
+
+    factory<UpsertCategoryUseCase> {
+        UpsertCategoryUseCase(get())
     }
 }
