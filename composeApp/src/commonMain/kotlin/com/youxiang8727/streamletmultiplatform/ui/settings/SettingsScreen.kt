@@ -22,27 +22,32 @@ import com.youxiang8727.streamletmultiplatform.domain.settings.model.AppThemeMod
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import streamletmultiplatform.composeapp.generated.resources.Res
+import streamletmultiplatform.composeapp.generated.resources.label_app_settings
 import streamletmultiplatform.composeapp.generated.resources.label_app_theme
+import streamletmultiplatform.composeapp.generated.resources.label_categories_settings
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    viewModel: SettingsScreenViewModel = koinViewModel()
+    viewModel: SettingsScreenViewModel = koinViewModel(),
+    navigateToCategoriesScreen: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
         modifier = modifier,
-        appThemeMode = state.appThemeMode,
-        saveAppThemeMode = viewModel::saveAppThemeMode
+        uiState = state,
+        saveAppThemeMode = viewModel::saveAppThemeMode,
+        navigateToCategoriesScreen = navigateToCategoriesScreen
     )
 }
 
 @Composable
 private fun SettingsScreenContent(
     modifier: Modifier = Modifier,
-    appThemeMode: AppThemeMode = AppThemeMode.SYSTEM,
-    saveAppThemeMode: (AppThemeMode) -> Unit = {}
+    uiState: SettingsScreenUiState = SettingsScreenUiState(),
+    saveAppThemeMode: (AppThemeMode) -> Unit = {},
+    navigateToCategoriesScreen: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier,
@@ -60,8 +65,28 @@ private fun SettingsScreenContent(
         item {
             AppThemeModeView(
                 modifier = Modifier.fillMaxWidth(),
-                appThemeMode = appThemeMode,
+                appThemeMode = uiState.appThemeMode,
                 saveAppThemeMode = saveAppThemeMode
+            )
+        }
+
+        item {
+            SettingsScreenLabelText(
+                modifier = Modifier,
+                text = stringResource(
+                    Res.string.label_app_settings
+                )
+            )
+        }
+
+        item {
+            AppSettingNavigationView(
+                modifier = Modifier.fillMaxWidth(),
+                borderEnabled = false,
+                text = stringResource(
+                    Res.string.label_categories_settings
+                ),
+                onClick = navigateToCategoriesScreen
             )
         }
     }
@@ -78,23 +103,40 @@ private fun AppThemeModeView(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         AppThemeMode.entries.forEach { mode ->
-            OutlinedCard(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                border = CardDefaults.outlinedCardBorder(enabled = appThemeMode == mode),
+            AppSettingNavigationView(
+                modifier = Modifier.fillMaxWidth(),
+                borderEnabled = appThemeMode == mode,
+                text = stringResource(mode.stringResource),
                 onClick = {
                     saveAppThemeMode(mode)
-                },
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    SettingsScreenItemText(
-                        text = stringResource(mode.stringResource)
-                    )
                 }
-            }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AppSettingNavigationView(
+    modifier: Modifier = Modifier,
+    borderEnabled: Boolean = true,
+    text: String,
+    onClick: () -> Unit
+) {
+    OutlinedCard(
+        modifier = modifier,
+        border = CardDefaults.outlinedCardBorder(enabled = borderEnabled),
+        onClick = {
+            onClick()
+        },
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            SettingsScreenItemText(
+                text = text
+            )
         }
     }
 }

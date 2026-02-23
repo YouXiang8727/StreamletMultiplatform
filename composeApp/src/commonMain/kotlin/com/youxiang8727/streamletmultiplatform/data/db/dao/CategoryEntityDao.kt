@@ -24,4 +24,10 @@ interface CategoryEntityDao {
 
     @Query("SELECT * FROM categories WHERE type = :transactionType")
     suspend fun getCategoriesByTransactionType(transactionType: TransactionType): List<CategoryEntity>
+
+    @Query("SELECT * FROM categories WHERE id = :id")
+    suspend fun getCategoryById(id: Long): CategoryEntity
+
+    @Query("SELECT * FROM categories WHERE type = :transactionType AND name = :name")
+    suspend fun getCategoryByTransactionTypeAndName(transactionType: TransactionType, name: String): CategoryEntity?
 }

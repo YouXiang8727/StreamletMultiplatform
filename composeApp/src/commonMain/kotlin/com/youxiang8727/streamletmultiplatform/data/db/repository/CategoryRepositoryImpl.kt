@@ -1,7 +1,6 @@
 package com.youxiang8727.streamletmultiplatform.data.db.repository
 
 import com.youxiang8727.streamletmultiplatform.data.db.dao.CategoryEntityDao
-import com.youxiang8727.streamletmultiplatform.data.db.model.CategoryEntity
 import com.youxiang8727.streamletmultiplatform.data.db.model.toCategory
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.Category
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.TransactionType
@@ -17,16 +16,22 @@ class CategoryRepositoryImpl(
     private val categoryEntityDao: CategoryEntityDao
 ): CategoryRepository {
     override suspend fun getCategoriesCount(): Int {
-        return categoryEntityDao.getCount()
+        return withContext(Dispatchers.IO) {
+            categoryEntityDao.getCount()
+        }
     }
 
     override suspend fun insertAll(categories: List<Category>) {
-        val categoryEntities = categories.map { it.toCategoryEntity() }
-        categoryEntityDao.insertAll(categoryEntities)
+        withContext(Dispatchers.IO) {
+            val categoryEntities = categories.map { it.toCategoryEntity() }
+            categoryEntityDao.insertAll(categoryEntities)
+        }
     }
 
     override suspend fun upsert(category: Category) {
-        categoryEntityDao.upsert(category.toCategoryEntity())
+        withContext(Dispatchers.IO) {
+            categoryEntityDao.upsert(category.toCategoryEntity())
+        }
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
@@ -42,6 +47,18 @@ class CategoryRepositoryImpl(
             categoryEntityDao.getCategoriesByTransactionType(transactionType).map {
                 it.toCategory()
             }
+        }
+    }
+
+    override suspend fun getCategoryById(id: Long): Category {
+        return withContext(Dispatchers.IO) {
+            categoryEntityDao.getCategoryById(id).toCategory()
+        }
+    }
+
+    override suspend fun getCategoryByTransactionTypeAndName(transactionType: TransactionType, name: String): Category? {
+        return withContext(Dispatchers.IO) {
+            categoryEntityDao.getCategoryByTransactionTypeAndName(transactionType = transactionType, name = name)?.toCategory()
         }
     }
 }
