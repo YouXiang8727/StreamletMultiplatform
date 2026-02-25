@@ -10,4 +10,6 @@ interface TransactionRepository {
     suspend fun getTransactionById(id: Long): TransactionData
 
     suspend fun upsert(transactionData: TransactionData)
+
+    suspend fun deleteTransactionById(id: Long)
 }

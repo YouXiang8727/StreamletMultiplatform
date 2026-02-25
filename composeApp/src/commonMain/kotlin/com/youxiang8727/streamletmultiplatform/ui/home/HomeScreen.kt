@@ -61,7 +61,8 @@ fun HomeScreen(
         onDateSelected = {
             viewModel.onDateSelected(it)
         },
-        navigateToTransactionScreen = navigateToTransactionScreen
+        navigateToTransactionScreen = navigateToTransactionScreen,
+        deleteTransactionById = viewModel::deleteTransactionById
     )
 }
 
@@ -70,7 +71,8 @@ private fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeScreenUiState = HomeScreenUiState(),
     onDateSelected: (LocalDate) -> Unit = {},
-    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {},
+    deleteTransactionById: (Long) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -159,7 +161,8 @@ private fun HomeScreenContent(
                     TransactionItem(
                         modifier = Modifier.fillMaxWidth(),
                         transactionItemUiState = it,
-                        navigateToTransactionScreen = navigateToTransactionScreen
+                        navigateToTransactionScreen = navigateToTransactionScreen,
+                        deleteTransactionById = deleteTransactionById
                     )
                 }
             }
@@ -184,7 +187,7 @@ private fun TransactionItem(
     modifier: Modifier = Modifier,
     transactionItemUiState: TransactionItemUiState = TransactionItemUiState(),
     navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {},
-    deleteTransactionDataById: (Long) -> Unit = {},
+    deleteTransactionById: (Long) -> Unit = {},
     copyTransactionDataById: (Long) -> Unit = {}
 ) {
     BoxWithConstraints(
@@ -265,7 +268,7 @@ private fun TransactionItem(
 
             IconButton(
                 onClick = {
-                    deleteTransactionDataById(transactionItemUiState.id)
+                    deleteTransactionById(transactionItemUiState.id)
                 }
             ) {
                 Icon(

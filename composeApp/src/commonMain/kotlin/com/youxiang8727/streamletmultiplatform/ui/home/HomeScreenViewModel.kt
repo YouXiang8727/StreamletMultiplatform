@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.youxiang8727.streamletmultiplatform.core.mvi.MviViewModel
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.TransactionType
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.toTransactionItemUiState
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.DeleteTransactionByIdUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByDateUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 class HomeScreenViewModel(
-    getTransactionByDateUseCase: GetTransactionByDateUseCase
+    getTransactionByDateUseCase: GetTransactionByDateUseCase,
+    private val deleteTransactionByIdUseCase: DeleteTransactionByIdUseCase
 ): MviViewModel<HomeScreenUiState, HomeScreenUiEvent, Nothing>(
     initialState = HomeScreenUiState(),
     reducer = HomeScreenReducer()
@@ -31,6 +33,14 @@ class HomeScreenViewModel(
         date: LocalDate
     ) {
         dispatch(HomeScreenUiEvent.OnDateSelected(date))
+    }
+
+    fun deleteTransactionById(
+        id: Long
+    ) {
+        viewModelScope.launch {
+            deleteTransactionByIdUseCase(id)
+        }
     }
 
 
