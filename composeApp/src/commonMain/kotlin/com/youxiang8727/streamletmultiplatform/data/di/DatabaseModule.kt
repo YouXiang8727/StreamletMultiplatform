@@ -8,6 +8,7 @@ import com.youxiang8727.streamletmultiplatform.data.db.repository.CategoryReposi
 import com.youxiang8727.streamletmultiplatform.data.db.repository.TransactionRepositoryImpl
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.CategoryRepository
 import com.youxiang8727.streamletmultiplatform.domain.transaction.repository.TransactionRepository
+import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.CopyTransactionByIdUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.DeleteTransactionByIdUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetAllCategoriesUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoriesByTransactionTypeUseCase
@@ -63,6 +64,10 @@ val databaseModule = module {
 
     factory<DeleteTransactionByIdUseCase> {
         DeleteTransactionByIdUseCase(get())
+    }
+
+    factory<CopyTransactionByIdUseCase> {
+        CopyTransactionByIdUseCase(get())
     }
 
     factory<GetCategoriesByTransactionTypeUseCase> {

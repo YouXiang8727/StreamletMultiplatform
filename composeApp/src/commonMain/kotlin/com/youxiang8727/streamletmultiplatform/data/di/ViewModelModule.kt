@@ -15,7 +15,7 @@ val viewModelModule = module {
     }
 
     viewModel<HomeScreenViewModel> {
-        HomeScreenViewModel(get(), get())
+        HomeScreenViewModel(get(), get(), get())
     }
 
     viewModel<TransactionScreenViewModel> { params ->

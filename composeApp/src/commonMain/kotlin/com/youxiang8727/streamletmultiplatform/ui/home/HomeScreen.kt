@@ -62,7 +62,8 @@ fun HomeScreen(
             viewModel.onDateSelected(it)
         },
         navigateToTransactionScreen = navigateToTransactionScreen,
-        deleteTransactionById = viewModel::deleteTransactionById
+        deleteTransactionById = viewModel::deleteTransactionById,
+        copyTransactionById = viewModel::copyTransactionById
     )
 }
 
@@ -72,7 +73,8 @@ private fun HomeScreenContent(
     uiState: HomeScreenUiState = HomeScreenUiState(),
     onDateSelected: (LocalDate) -> Unit = {},
     navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {},
-    deleteTransactionById: (Long) -> Unit = {}
+    deleteTransactionById: (Long) -> Unit = {},
+    copyTransactionById: (Long) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -140,7 +142,10 @@ private fun HomeScreenContent(
                 ) {
                     TransactionItem(
                         modifier = Modifier.fillMaxWidth(),
-                        transactionItemUiState = it
+                        transactionItemUiState = it,
+                        navigateToTransactionScreen = navigateToTransactionScreen,
+                        deleteTransactionById = deleteTransactionById,
+                        copyTransactionDataById = copyTransactionById
                     )
                 }
 
@@ -162,7 +167,8 @@ private fun HomeScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                         transactionItemUiState = it,
                         navigateToTransactionScreen = navigateToTransactionScreen,
-                        deleteTransactionById = deleteTransactionById
+                        deleteTransactionById = deleteTransactionById,
+                        copyTransactionDataById = copyTransactionById
                     )
                 }
             }
