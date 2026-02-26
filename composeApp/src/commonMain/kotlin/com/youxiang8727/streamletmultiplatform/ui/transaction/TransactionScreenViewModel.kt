@@ -8,7 +8,6 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.model.getDefau
 import com.youxiang8727.streamletmultiplatform.domain.transaction.model.toCategory
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetCategoriesByTransactionTypeUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTransactionByIdUseCase
-import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenReducer
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertTransactionUseCase
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -38,9 +37,11 @@ class TransactionScreenViewModel(
 
             is TransactionScreenDataSource.EditTransactionDataById -> {
                 val transaction = getTransactionByIdUseCase(dataSource.id)
+                val categories = getCategoriesByTransactionTypeUseCase(transaction.category.type)
                 dispatch(
-                    TransactionScreenUiEvent.OnTransactionDataUpdated(
-                        transactionData = transaction
+                    TransactionScreenUiEvent.OnTransactionDataLoaded(
+                        transactionData = transaction,
+                        categories = categories
                     )
                 )
             }
