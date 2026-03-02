@@ -1,30 +1,42 @@
 package com.youxiang8727.streamletmultiplatform.ui.home
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.youxiang8727.streamletmultiplatform.core.ui.UiText
+import com.youxiang8727.streamletmultiplatform.core.ui.toDp
+import com.youxiang8727.streamletmultiplatform.core.ui.toPx
 import com.youxiang8727.streamletmultiplatform.ui.common.calendar.BasicCalendarView
 import com.youxiang8727.streamletmultiplatform.ui.common.calendar.rememberCalendarState
 import com.youxiang8727.streamletmultiplatform.ui.transaction.TransactionScreenDataSource
@@ -49,7 +61,9 @@ fun HomeScreen(
         onDateSelected = {
             viewModel.onDateSelected(it)
         },
-        navigateToTransactionScreen = navigateToTransactionScreen
+        navigateToTransactionScreen = navigateToTransactionScreen,
+        deleteTransactionById = viewModel::deleteTransactionById,
+        copyTransactionById = viewModel::copyTransactionById
     )
 }
 
@@ -58,7 +72,9 @@ private fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeScreenUiState = HomeScreenUiState(),
     onDateSelected: (LocalDate) -> Unit = {},
-    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {},
+    deleteTransactionById: (Long) -> Unit = {},
+    copyTransactionById: (Long) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -126,7 +142,10 @@ private fun HomeScreenContent(
                 ) {
                     TransactionItem(
                         modifier = Modifier.fillMaxWidth(),
-                        transactionItemUiState = it
+                        transactionItemUiState = it,
+                        navigateToTransactionScreen = navigateToTransactionScreen,
+                        deleteTransactionById = deleteTransactionById,
+                        copyTransactionDataById = copyTransactionById
                     )
                 }
 
@@ -147,7 +166,9 @@ private fun HomeScreenContent(
                     TransactionItem(
                         modifier = Modifier.fillMaxWidth(),
                         transactionItemUiState = it,
-                        navigateToTransactionScreen = navigateToTransactionScreen
+                        navigateToTransactionScreen = navigateToTransactionScreen,
+                        deleteTransactionById = deleteTransactionById,
+                        copyTransactionDataById = copyTransactionById
                     )
                 }
             }
@@ -171,40 +192,107 @@ private fun TransactionTypeLabel(
 private fun TransactionItem(
     modifier: Modifier = Modifier,
     transactionItemUiState: TransactionItemUiState = TransactionItemUiState(),
-    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {}
+    navigateToTransactionScreen: (TransactionScreenDataSource) -> Unit = {},
+    deleteTransactionById: (Long) -> Unit = {},
+    copyTransactionDataById: (Long) -> Unit = {}
 ) {
-    ElevatedCard(
-        modifier = modifier
-            .clickable {
-                navigateToTransactionScreen(
-                    TransactionScreenDataSource.EditTransactionDataById(transactionItemUiState.id)
-                )
-            }
+    BoxWithConstraints(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = transactionItemUiState.title,
-                    style = MaterialTheme.typography.titleMedium
+        val width = maxWidth.toPx()
+
+        val anchors = DraggableAnchors {
+            0 at 0f
+            1 at -width * .4f
+        }
+
+        val anchoredDraggableState = remember {
+            AnchoredDraggableState(
+                initialValue = 0,
+                anchors = anchors
+            )
+        }
+
+        ElevatedCard(
+            modifier = modifier
+                .anchoredDraggable(
+                    state = anchoredDraggableState,
+                    orientation = Orientation.Horizontal
                 )
+                .offset(
+                    x = anchoredDraggableState.offset.toDp()
+                )
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = transactionItemUiState.title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Text(
+                        text = transactionItemUiState.categoryUiText.asString(),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
 
                 Text(
-                    text = transactionItemUiState.categoryUiText.asString(),
-                    style = MaterialTheme.typography.bodyMedium
+                    text = transactionItemUiState.amount.toString(),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .offset(
+                    x = width.toDp() + anchoredDraggableState.offset.toDp()
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            IconButton(
+                onClick = {
+                    navigateToTransactionScreen(
+                        TransactionScreenDataSource.EditTransactionDataById(transactionItemUiState.id)
+                    )
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.EditNote,
+                    contentDescription = null
                 )
             }
 
-            Text(
-                text = transactionItemUiState.amount.toString(),
-                style = MaterialTheme.typography.bodyLarge
-            )
+            IconButton(
+                onClick = {
+                    deleteTransactionById(transactionItemUiState.id)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = null
+                )
+            }
+
+            IconButton(
+                onClick = {
+                    copyTransactionDataById(transactionItemUiState.id)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ContentCopy,
+                    contentDescription = null
+                )
+            }
         }
     }
 }

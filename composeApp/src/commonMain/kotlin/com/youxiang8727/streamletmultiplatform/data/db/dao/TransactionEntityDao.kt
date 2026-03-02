@@ -1,6 +1,7 @@
 package com.youxiang8727.streamletmultiplatform.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
@@ -21,4 +22,7 @@ interface TransactionEntityDao {
     @Transaction
     @Query("SELECT * FROM `transaction` WHERE id = :id")
     suspend fun getTransactionById(id: Long): TransactionDataPojo
+
+    @Query("DELETE FROM `transaction` WHERE id = :id")
+    suspend fun deleteTransactionById(id: Long)
 }

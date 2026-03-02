@@ -9,8 +9,11 @@ class TransactionScreenReducer: Reducer<TransactionScreenUiState, TransactionScr
         event: TransactionScreenUiEvent
     ): TransactionScreenUiState {
         return when (event) {
-            is TransactionScreenUiEvent.OnTransactionDataUpdated -> {
+            is TransactionScreenUiEvent.OnTransactionDataLoaded -> {
                 event.transactionData.toTransactionScreenUiState()
+                    .copy(
+                        categories = event.categories
+                    )
             }
             is TransactionScreenUiEvent.OnTransactionTypeChanged -> {
                 state.copy(

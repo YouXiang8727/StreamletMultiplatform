@@ -38,4 +38,10 @@ class TransactionRepositoryImpl(
             transactionEntityDao.upsert(transactionEntity)
         }
     }
+
+    override suspend fun deleteTransactionById(id: Long) {
+        withContext(Dispatchers.IO) {
+            transactionEntityDao.deleteTransactionById(id)
+        }
+    }
 }

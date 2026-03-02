@@ -14,7 +14,7 @@ sealed interface TransactionScreenUiEvent: UiEvent {
         val category: Category
     ): TransactionScreenUiEvent
 
-    data class OnTransactionDataUpdated(val transactionData: TransactionData): TransactionScreenUiEvent
+    data class OnTransactionDataLoaded(val transactionData: TransactionData, val categories: List<Category>): TransactionScreenUiEvent
 
     data class OnTransactionTypeChanged(
         val transactionType: TransactionType,
