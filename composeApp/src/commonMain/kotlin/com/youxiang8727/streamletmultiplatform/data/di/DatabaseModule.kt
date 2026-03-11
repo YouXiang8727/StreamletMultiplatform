@@ -19,6 +19,8 @@ import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.GetTra
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.InsertDefaultCategoriesUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertCategoryUseCase
 import com.youxiang8727.streamletmultiplatform.domain.transaction.usecase.UpsertTransactionUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -31,7 +33,7 @@ val databaseModule = module {
     }
 
     single<TransactionRepository> {
-        TransactionRepositoryImpl(get())
+        TransactionRepositoryImpl(get(), Dispatchers.IO)
     }
 
     single<CategoryEntityDao> {
@@ -39,7 +41,7 @@ val databaseModule = module {
     }
 
     single<CategoryRepository> {
-        CategoryRepositoryImpl(get())
+        CategoryRepositoryImpl(get(), Dispatchers.IO)
     }
 
     factory<InsertDefaultCategoriesUseCase> {
